@@ -284,6 +284,18 @@
                                 //all false
     //if allFalse, return false
     //else return true
+
+    //returns true when everything in the collection evaluates to false
+    //[1,2]
+
+    var allFalse = _.every(collection, function(item) {
+      if (!iterator(item)) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    return !allFalse; 
   };
 
 
@@ -354,7 +366,25 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var memo = {};
+    // {'[2,3]: 5', '..'}
+        //returns a function 
+         // inner function is what takes the arguments;
+        //check if func is called with certain arg
+    return function() {
+      var argumentsArray = Array.prototype.slice.call(arguments);
+      var argumentsString = argumentsArray.toString();
+      if (memo[argumentsString] === undefined) {
+        var computed = func.apply(this, arguments);
+        memo[argumentsString] = computed;
+        return computed;
+      } else {
+        return memo[argumentsString];
+      }
+    };
   };
+  // var initiate = _.memoize(function(x) { return x + 1; } );
+  // initiate(3);
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
