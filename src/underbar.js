@@ -147,8 +147,6 @@
     //if the value is unique, not in evaluatedUniqueness = []
       //push the item to result and push value to evaluatedUniqueness
     //return result
-     
-    
   };
 
 
@@ -156,7 +154,14 @@
   _.map = function(collection, iterator) {                                                         
     // map() is a useful primitive iteration function that works a lot      
     // the members, it also maintains an array of results.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+    var result = [];
+
+    for (var i = 0; i < collection.length; i++) {
+      result.push(iterator(collection[i]));
+    }
+
+    return result;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
   };
 
   /*
@@ -198,6 +203,40 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    if (accumulator === undefined) {
+      if (Array.isArray(collection)) {
+        accumulator = collection[0]; // 1
+        for (var i = 1; i < collection.length; i++) {
+          accumulator = iterator(accumulator, collection[i]);     
+        }
+      } else {
+        //for objects and no accumulator
+        
+        for (var key in collection) {
+          if (accumulator === undefined) {
+            accumulator = collection[key];
+          } else {
+            accumulator = iterator(accumulator, collection[key]);
+          }
+        }
+      }
+    } else {
+      if (Array.isArray(collection)) {
+        for (var i = 0; i < collection.length; i++) {
+          accumulator = iterator(accumulator, collection[i]);     
+        }
+      } else {
+        //for objects and with accumulator
+        for (var key in collection) {
+         
+          accumulator = iterator(accumulator, collection[key]);
+        
+        }
+      }
+    }
+
+    return accumulator;
+    // 1, 2, 3
   };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -216,12 +255,35 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    if (iterator === undefined) {
+      iterator = _.identity;
+    }
+    //reduce-> collection, iterator2, accumulator
+    return _.reduce(collection, function(truthy, item) {
+      // return iterator(item) && truthy;
+      if (truthy) {
+        if (iterator(item)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      return false;
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    //if at least 1 is true, must return true
+    
+    //every => returns true if every element is true
+    //every => returns false if some are true
+                                // and some false
+                                //all false
+    //if allFalse, return false
+    //else return true
   };
 
 
